@@ -24,7 +24,7 @@ const classifyController={
       res.json({code:0,message:'内部错误'})
     }
   },
-  updata: async function(req,res,next){
+  update: async function(req,res,next){
     let id = req.params.id;
     let classify_name = req.body.classify_name;
     if(!classify_name){
@@ -32,7 +32,7 @@ const classifyController={
       return
     }
     try{
-      const classify = await Classify.updata(id,{classify_name});
+      const classify = await Classify.update(id,{classify_name});
       res.json({code:200,data:classify})
     }catch(e){
       console.log(e)

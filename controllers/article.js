@@ -1,6 +1,8 @@
 const Article = require('./../models/article');
+const Classify = require('./../models/classify');
+
 const articelController={
-  all:async function(req,res,next){
+  all: async function(req,res,next){
     try{
        const article = await Article.all();
        res.json({code: 200,data: article}) 
@@ -28,7 +30,7 @@ const articelController={
       res.json({code:0,message:'内部错误'})
     }
   },
-  updata: async function(req,res,next){
+  update: async function(req,res,next){
     let classify_id = req.body.classify_id;
     let title =req.body.title;
     let content =req.body.content;
@@ -37,7 +39,7 @@ const articelController={
       return
     }
     try{
-      const article = await Article.updata(id,{
+      const article = await Article.update(id,{
         classify_id,title,content
       })
       res.json({code:200,data:article})
@@ -57,14 +59,33 @@ const articelController={
       res.json({code:0,message:'内部错误'})
     }
   },
-  delete: async function(req,res,next){
+  //软删除
+  delete: async function(req,res,next){ 
     let id = req.params.id;
+    let is_delete = req.query.is_delete;
+    console.log(is_delete)
     try{
-      await Article.delete(id);
+      await Article.update(id,{is_delete});
       res.json({code:200,message:'删除成功'});
     }catch(e){
       console.log(e)
       res.json({code:0,message:'内部错误'})
+    }
+  },
+  list: async function(req,res,next){
+    let id  =req.params.id;
+    try{
+      const data = await Article.where({'classify.id':id})
+      .leftJoin( 'classify' ,'article.classify_id','classify.id')
+      .column('article.id','classify_name')
+      // const data = await Classify.where({'classify.id':id})
+      // .leftJoin( 'article' ,'classify.id','article.classify_id')
+      // .column('article.id','classify_name')
+      res.json({code:200,data:data});
+      console.log(data)
+    }catch(e){
+      console.log(e)
+      res.json({code:0,message:'内部错误'});
     }
   }
 }

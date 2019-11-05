@@ -3,4 +3,4 @@
 .npm-debug.log
 .yarn-error.log
 .node_modules
-config.js
+.config.js

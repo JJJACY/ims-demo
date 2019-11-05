@@ -28,7 +28,7 @@ const userController ={
       res.json({code: 0,message:'内部错误'})
     }
   },
-  updata: async function(req,res,next){
+  update: async function(req,res,next){
     let  id = req.params.id;
     let name = req.body.name;
     let tel  = req.body.tel;
@@ -38,7 +38,7 @@ const userController ={
       return
     }
     try{
-      const user = await User.updata(id,{
+      const user = await User.update(id,{
         name,tel,password
       })
       res.json({code:200,data:user})
